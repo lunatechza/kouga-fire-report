@@ -210,7 +210,7 @@
 
     function buildReportUrl() {
       const base = buildBaseUrl();
-      const url = new URL(base, window.location.href);
+      const url = new URL('index.html', base);
       const source = sanitize(sourceInput.value, 80) || 'embed';
       const ref = sanitize(refInput.value, 80);
       const area = sanitize(areaInput.value, 120);
