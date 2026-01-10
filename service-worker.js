@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kouga-fire-v4';
+const CACHE_NAME = 'kouga-fire-v5';
 const baseUrl = new URL('./', self.location);
 
 const ASSETS = [
@@ -9,6 +9,7 @@ const ASSETS = [
   new URL('widget.js', baseUrl).href,
   new URL('manifest.json', baseUrl).href,
   new URL('icon.svg', baseUrl).href,
+  new URL('assets/lunatech-icon.svg', baseUrl).href,
   new URL('offline.html', baseUrl).href
 ];
 
