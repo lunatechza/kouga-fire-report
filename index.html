@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#b91c1c" />
+  <title>Kouga Fire Report</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/icon.svg" />
+  <link rel="apple-touch-icon" href="/icon.svg" />
+  <style>
+    :root {
+      --red: #b91c1c;
+      --dark: #111827;
+      --bg: #f9fafb;
+      --btn: #111827;
+      --btn-text: #fff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+    }
+    header {
+      padding: 16px;
+      background: var(--red);
+      color: white;
+      text-align: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    main { padding: 16px; max-width: 720px; margin: 0 auto; }
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+    .btn {
+      width: 100%;
+      padding: 16px;
+      margin: 8px 0;
+      border: 0;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      background: var(--btn);
+      color: var(--btn-text);
+      cursor: pointer;
+    }
+    .btn.red { background: var(--red); }
+    .btn.outline {
+      background: white;
+      color: var(--dark);
+      border: 2px solid var(--dark);
+    }
+    select, input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      font-size: 16px;
+      margin: 6px 0 12px;
+    }
+    small { color: #6b7280; }
+    .disclaimer {
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <header>Kouga Wildfire Report</header>
+
+  <main>
+    <div class="card">
+      <h2>Emergency Calls (One‑Tap)</h2>
+      <button class="btn red" onclick="callNumber('0422910250')">Call Kouga Fire &amp; Disaster: 042 291 0250</button>
+      <button class="btn red" onclick="callNumber('0422002200')">Call Kouga Switchboard: 042 200 2200 (Option 1)</button>
+      <button class="btn red" onclick="callNumber('112')">Call Emergency: 112</button>
+      <small>Use 112 only if safe and urgent.</small>
+    </div>
+
+    <div class="card">
+      <h2>Send WhatsApp Report</h2>
+
+      <label for="visible">Visible</label>
+      <select id="visible">
+        <option value="flames">Flames</option>
+        <option value="smoke">Smoke</option>
+        <option value="both">Both</option>
+      </select>
+
+      <label for="size">Size</label>
+      <select id="size">
+        <option value="S">S (small)</option>
+        <option value="M">M (medium)</option>
+        <option value="L">L (large)</option>
+      </select>
+
+      <label for="spread">Spread</label>
+      <select id="spread">
+        <option value="slow">Slow</option>
+        <option value="running">Running</option>
+        <option value="spotting">Spotting</option>
+      </select>
+
+      <label for="note">Landmark / Road (optional)</label>
+      <input id="note" placeholder="e.g., R330 near Hankey" />
+
+      <label for="manualLocation">Manual location (if GPS off)</label>
+      <input id="manualLocation" placeholder="e.g., Humansdorp, near bridge" />
+
+      <button class="btn" id="getLocationBtn">Get GPS Location</button>
+      <small id="geoStatus">Location not requested yet.</small>
+
+      <button class="btn red" id="whatsappBtn">Send via WhatsApp</button>
+      <button class="btn outline" id="smsBtn">Send via SMS (fallback)</button>
+      <button class="btn outline" id="copyBtn">Copy message</button>
+    </div>
+
+    <div class="card">
+      <div class="disclaimer">
+        <strong>Safety First:</strong> Only report if safe to do so.
+        This tool sends your details via WhatsApp or SMS. If location fails, use the manual location field.
+      </div>
+    </div>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
