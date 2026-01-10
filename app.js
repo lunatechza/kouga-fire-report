@@ -21,6 +21,21 @@ const firebaseConfig = {
 
 let lastCoords = null;
 let firestoreDb = null;
+let logStatusEl = null;
+
+const THROTTLE_MS = 30000;
+
+const queryParams = new URLSearchParams(window.location.search);
+const querySourceRaw = sanitizeTag(queryParams.get('source')) || 'kouga-pwa';
+const queryRefRaw = sanitizeTag(queryParams.get('ref'));
+const queryArea = sanitizeText(queryParams.get('area'), 120);
+const queryWidgetVersion = sanitizeTag(queryParams.get('widgetVersion'));
+const querySource = encodeTag(querySourceRaw);
+const queryRef = encodeTag(queryRefRaw);
+const queryWidgetVersionEncoded = encodeTag(queryWidgetVersion);
+const queryLat = parseFloat(queryParams.get('lat'));
+const queryLon = parseFloat(queryParams.get('lon'));
+const hasQueryCoords = Number.isFinite(queryLat) && Number.isFinite(queryLon);
 
 function callNumber(number) {
   window.location.href = `tel:${number}`;
@@ -39,8 +54,77 @@ function timestampLocal() {
   });
 }
 
-function safeValue(value) {
-  return value && value.trim() ? value.trim() : null;
+function sanitizeText(value, maxLength = 300) {
+  if (!value) return null;
+  const cleaned = value.trim().replace(/\s+/g, ' ');
+  if (!cleaned) return null;
+  return cleaned.slice(0, maxLength);
+}
+
+function sanitizeTag(value, maxLength = 80) {
+  return sanitizeText(value, maxLength);
+}
+
+function encodeTag(value) {
+  return value ? encodeURIComponent(value) : null;
+}
+
+function ensureLogStatus() {
+  if (logStatusEl) {
+    return logStatusEl;
+  }
+  const reference = document.getElementById('copyBtn');
+  if (!reference) return null;
+  const status = document.createElement('div');
+  status.id = 'logStatus';
+  status.style.marginTop = '6px';
+  status.style.fontSize = '12px';
+  status.style.color = '#6b7280';
+  status.setAttribute('aria-live', 'polite');
+  reference.insertAdjacentElement('afterend', status);
+  logStatusEl = status;
+  return logStatusEl;
+}
+
+function setLogStatus(message) {
+  const status = ensureLogStatus();
+  if (!status) return;
+  status.textContent = message || '';
+}
+
+function getClientSessionId() {
+  const key = 'kougaClientSessionId';
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      return stored;
+    }
+    const fresh = crypto.randomUUID ? crypto.randomUUID() : `session-${Date.now()}`;
+    localStorage.setItem(key, fresh);
+    return fresh;
+  } catch (error) {
+    return crypto.randomUUID ? crypto.randomUUID() : `session-${Date.now()}`;
+  }
+}
+
+function getFieldValue(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function getFieldChecked(id) {
+  const el = document.getElementById(id);
+  return el ? el.checked : false;
+}
+
+function hasRequiredFields() {
+  const requiredIds = ['visible', 'severity', 'safeToReport', 'consent'];
+  const missing = requiredIds.some((id) => !document.getElementById(id));
+  if (missing) {
+    setLogStatus('Form unavailable. Please refresh and try again.');
+    return false;
+  }
+  return true;
 }
 
 function setError(id, show) {
@@ -54,13 +138,13 @@ function hasGeolocation() {
 }
 
 function buildReportData() {
-  const visible = document.getElementById('visible').value;
-  const severity = document.getElementById('severity').value;
-  const size = document.getElementById('size').value;
-  const spread = document.getElementById('spread').value;
-  const note = safeValue(document.getElementById('note').value);
-  const nearestArea = safeValue(document.getElementById('nearestArea').value);
-  const safeToReport = document.getElementById('safeToReport').checked;
+  const visible = getFieldValue('visible');
+  const severity = getFieldValue('severity');
+  const size = getFieldValue('size');
+  const spread = getFieldValue('spread');
+  const note = sanitizeText(getFieldValue('note'), 300);
+  const nearestArea = sanitizeText(getFieldValue('nearestArea'), 120);
+  const safeToReport = getFieldChecked('safeToReport');
 
   let locationLine = 'GPS: not available';
   let mapsLink = null;
@@ -112,8 +196,11 @@ function buildMessage() {
 }
 
 function validateForm() {
+  if (!hasRequiredFields()) {
+    return false;
+  }
   const report = buildReportData();
-  const consent = document.getElementById('consent').checked;
+  const consent = getFieldChecked('consent');
 
   const visibleMissing = !report.visible;
   const severityMissing = !report.severity;
@@ -153,6 +240,7 @@ async function copyReport() {
     return;
   }
   const text = buildMessage();
+  logReport('copy');
   if (navigator.clipboard && navigator.clipboard.writeText) {
     try {
       await navigator.clipboard.writeText(text);
@@ -166,8 +254,32 @@ async function copyReport() {
   }
 }
 
+function isThrottled() {
+  const now = Date.now();
+  let last = 0;
+  try {
+    last = Number(localStorage.getItem('kougaLastReportAt') || 0);
+  } catch (error) {
+    last = 0;
+  }
+  if (now - last < THROTTLE_MS) {
+    const waitSeconds = Math.ceil((THROTTLE_MS - (now - last)) / 1000);
+    setLogStatus(`Please wait ${waitSeconds}s before sending another report.`);
+    return true;
+  }
+  try {
+    localStorage.setItem('kougaLastReportAt', String(now));
+  } catch (error) {
+    // Ignore storage issues; throttling becomes best-effort.
+  }
+  return false;
+}
+
 function sendWhatsApp() {
   if (!validateForm()) {
+    return;
+  }
+  if (isThrottled()) {
     return;
   }
   const msg = buildMessage();
@@ -178,6 +290,9 @@ function sendWhatsApp() {
 
 function sendEmail() {
   if (!validateForm()) {
+    return;
+  }
+  if (isThrottled()) {
     return;
   }
   const body = buildMessage();
@@ -203,6 +318,17 @@ function requestLocation() {
     },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
   );
+}
+
+function applyQueryPrefill() {
+  const nearestAreaInput = document.getElementById('nearestArea');
+  if (nearestAreaInput && queryArea && !nearestAreaInput.value) {
+    nearestAreaInput.value = queryArea;
+  }
+  if (hasQueryCoords) {
+    lastCoords = { latitude: queryLat, longitude: queryLon };
+    geoStatus.textContent = `Location (from link): ${queryLat.toFixed(6)}, ${queryLon.toFixed(6)}`;
+  }
 }
 
 function initializeFirebase() {
@@ -246,10 +372,14 @@ function baseReportPayload(report, channel) {
     spread: report.spread,
     nearestArea: report.nearestArea,
     note: report.note,
-    source: 'kouga-pwa',
+    source: querySource,
+    ref: queryRef,
+    widgetVersion: queryWidgetVersionEncoded,
     channel,
+    submitChannel: channel,
     pageUrl: window.location.href,
-    userAgent: navigator.userAgent
+    userAgent: navigator.userAgent,
+    clientSessionId: getClientSessionId()
   };
 }
 
@@ -266,7 +396,9 @@ async function logReport(channel) {
       clientReportId,
       reportedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
+    setLogStatus('Logged ✓');
   } catch (error) {
+    setLogStatus('Log failed (still sent).');
     // Best-effort logging only.
   }
 }
@@ -301,9 +433,11 @@ emailBtn.addEventListener('click', sendEmail);
 copyBtn.addEventListener('click', copyReport);
 
 firestoreDb = initializeFirebase();
+applyQueryPrefill();
 loadConsent();
 bindConsentPersistence();
 setLastUpdated();
+ensureLogStatus();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

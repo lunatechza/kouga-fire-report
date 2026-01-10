@@ -23,6 +23,114 @@ A fully static, GitHub Pages–compatible wildfire reporting web app for Kouga M
 
 > GitHub Pages serves over HTTPS, which is required for geolocation and Firebase.
 
+## Embedding and partner widgets (partner quick start)
+Use the snippets below or open `embed.html` to generate copy‑paste snippets with live previews.
+
+**Quick start (copy/paste)**
+```html
+<script
+  src="https://lunatechza.github.io/kouga-fire-report/widget.js"
+  data-label="🔥 Report Fire"
+  data-ref="station-23"
+  data-source="embed"
+  data-position="bottom-right"
+></script>
+```
+
+> The widget resolves its base URL from the script `src` so it stays GitHub Pages subpath‑safe.
+
+### Simple HTML button snippet
+```html
+<a
+  href="https://lunatechza.github.io/kouga-fire-report/?source=partner-site&ref=station-23&area=Humansdorp"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  🔥 Report Fire
+</a>
+```
+
+### Floating button snippet (no widget.js)
+```html
+<a
+  href="https://lunatechza.github.io/kouga-fire-report/?source=partner-site&ref=station-23&area=Humansdorp"
+  target="_blank"
+  rel="noopener noreferrer"
+  style="
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 9999;
+    background: #d7263d;
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  "
+>
+  🔥 Report Fire
+</a>
+```
+
+### widget.js usage (preferred)
+Include `widget.js` from the same host as the PWA. The script injects a floating button automatically.
+```html
+<script
+  src="https://lunatechza.github.io/kouga-fire-report/widget.js"
+  data-label="🔥 Report Fire"
+  data-ref="station-23"
+  data-source="embed"
+  data-position="bottom-right"
+  data-version="1.1.0"
+></script>
+```
+
+**Widget configuration reference**
+| Attribute | Description | Default |
+| --- | --- | --- |
+| `data-label` | Button text (use 🔥 if you want the fire emoji). | `🔥 Report Fire` |
+| `data-ref` | Partner or campaign reference (max 80 chars). | _(none)_ |
+| `data-source` | Source label (max 80 chars). | `embed` |
+| `data-position` | `bottom-right`, `bottom-left`, `top-right`, or `top-left`. | `bottom-right` |
+| `data-url` | Optional override of the base URL for the PWA. | _(auto)_ |
+| `data-version` | Optional widget version tag for logging. | _(none)_ |
+
+**Position examples**
+```html
+<script src="https://lunatechza.github.io/kouga-fire-report/widget.js" data-position="bottom-right"></script>
+<script src="https://lunatechza.github.io/kouga-fire-report/widget.js" data-position="bottom-left"></script>
+<script src="https://lunatechza.github.io/kouga-fire-report/widget.js" data-position="top-right"></script>
+<script src="https://lunatechza.github.io/kouga-fire-report/widget.js" data-position="top-left"></script>
+```
+
+**Base URL notes**
+- GitHub Pages hosts at `https://<org>.github.io/<repo>/` so always include the repo path.
+- The widget uses its own `src` URL to stay subpath‑safe.
+- If you must override, set `data-url` to the full base URL ending in `/`.
+
+### Flutter (url_launcher) snippet
+```dart
+import 'package:url_launcher/url_launcher.dart';
+
+Future<void> openKougaReport() async {
+  final url = Uri.parse(
+    'https://lunatechza.github.io/kouga-fire-report/?source=flutter&ref=my-app&area=Humansdorp',
+  );
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw 'Could not launch $url';
+  }
+}
+```
+
+## Changelog
+### v1.1.0
+- Added partner widget v1.1.0 with idempotent injection and version tagging.
+- Added `embed.html` live demo generator with copy buttons.
+- Added client-side throttling + sanitized input handling in the PWA.
+- Added extra Firestore logging fields (session ID, widget version, submit channel).
+
 ## Firebase + Firestore setup (logging)
 1. Create a Firebase project in the Firebase Console.
 2. Create a Firestore database (start in production or test mode as needed).
