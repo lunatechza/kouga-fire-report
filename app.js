@@ -10,10 +10,13 @@ const EMAIL_ADDRESS = 'callcentre@kouga.gov.za';
 const EMAIL_SUBJECT = 'Wildfire Report – Kouga';
 
 const firebaseConfig = {
-  apiKey: '',
-  authDomain: '',
-  projectId: '',
-  appId: ''
+  apiKey: 'AIzaSyDhGEhrs3en20GZaSMckL9Bj_5sjw0XBfk',
+  authDomain: 'kouga-wildfire-report.firebaseapp.com',
+  projectId: 'kouga-wildfire-report',
+  storageBucket: 'kouga-wildfire-report.firebasestorage.app',
+  messagingSenderId: '689369249430',
+  appId: '1:689369249430:web:e73eca9ce748d82d5a34b7',
+  measurementId: 'G-5QJLSETQD1'
 };
 
 let lastCoords = null;
