@@ -256,7 +256,8 @@
 
       linkSnippet.value = `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
 
-      widgetSnippet.value = `<script\n  src="${baseUrl}widget.js"\n  data-label="${label}"\n  data-source="${source}"${ref ? `\n  data-ref="${ref}"` : ''}\n  data-position="${position}"${version ? `\n  data-version="${version}"` : ''}\n></script>`;
+      const scriptCloseTag = '</' + 'script>';
+      widgetSnippet.value = `<script\n  src="${baseUrl}widget.js"\n  data-label="${label}"\n  data-source="${source}"${ref ? `\n  data-ref="${ref}"` : ''}\n  data-position="${position}"${version ? `\n  data-version="${version}"` : ''}\n>${scriptCloseTag}`;
 
       flutterSnippet.value = `import 'package:url_launcher/url_launcher.dart';\n\nFuture<void> openKougaReport() async {\n  final url = Uri.parse('${url}');\n  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {\n    throw 'Could not launch $url';\n  }\n}`;
 
