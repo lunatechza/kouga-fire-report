@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#b91c1c" />
+  <title>Privacy Policy - Kouga Fire Report</title>
+  <link rel="icon" href="icon.svg" />
+  <style>
+    :root {
+      --red: #b91c1c;
+      --dark: #111827;
+      --bg: #f9fafb;
+      --muted: #6b7280;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+    }
+    header {
+      padding: 16px;
+      background: var(--red);
+      color: white;
+      text-align: center;
+      font-weight: 700;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      padding-top: 6px;
+    }
+    nav a { color: white; text-decoration: underline; }
+    main { padding: 16px; max-width: 760px; margin: 0 auto; }
+    h1 { margin-top: 0; }
+    .note { color: var(--muted); font-size: 14px; }
+    .alert {
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    footer {
+      padding: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <header>
+    Privacy Policy
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./terms.html">Terms of Use</a>
+      <a href="./disclaimer.html">Disclaimer</a>
+    </nav>
+  </header>
+  <main>
+    <div class="alert">If life‑threatening, call 112 immediately.</div>
+    <h1>Privacy Policy</h1>
+    <p class="note">Last updated: 2026-01-01</p>
+    <p>This Privacy Policy explains how the Kouga Fire Report web app collects and uses information when you submit a report.</p>
+
+    <h2>What we collect</h2>
+    <ul>
+      <li>Report details you enter, such as visible signs, severity, size, spread, nearest town/area, and optional notes.</li>
+      <li>Location information if you choose to share GPS coordinates. If GPS is unavailable, you can enter a nearest town/area instead.</li>
+      <li>Basic device and usage information such as your browser user agent and page URL.</li>
+    </ul>
+
+    <h2>Why we collect it</h2>
+    <p>We use your report to help municipal responders track incidents and cross‑reference incoming reports for operational response and safety.</p>
+
+    <h2>Legal basis / consent</h2>
+    <p>Submission is voluntary. By sending a report you consent to the collection and use of the information described here.</p>
+
+    <h2>Where it is sent</h2>
+    <ul>
+      <li>WhatsApp: to the Kouga call centre number you choose to message.</li>
+      <li>Email: to the Kouga call centre email address.</li>
+      <li>Firebase Firestore: a copy is logged for cross‑referencing and audit purposes.</li>
+    </ul>
+
+    <h2>Retention</h2>
+    <p>Reports are kept for operational and audit purposes. Unless otherwise required, we aim to keep records for 12–24 months.</p>
+
+    <h2>Sharing</h2>
+    <p>Your report is shared with Kouga Municipality responders and operational staff. We do not sell your information.</p>
+
+    <h2>Security</h2>
+    <p>We take reasonable measures to protect information, but no system is completely secure.</p>
+
+    <h2>Your rights and contact</h2>
+    <p>For municipal data queries, contact <strong>callcentre@kouga.gov.za</strong>.</p>
+    <p>For app feedback or technical issues, open a GitHub issue at <strong>https://github.com/lunatechza/kouga-fire-report/issues</strong>.</p>
+
+    <h2>Children</h2>
+    <p>This service is not intended for children. If you are under 18, please ask an adult to submit the report.</p>
+  </main>
+  <footer>
+    <div>
+      <a href="./index.html">Back to report</a>
+      · <a href="./terms.html">Terms</a>
+      · <a href="./disclaimer.html">Disclaimer</a>
+    </div>
+    <div>MIT Licence · Kouga Fire Report</div>
+  </footer>
+</body>
+</html>
