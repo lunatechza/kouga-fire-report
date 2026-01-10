@@ -1,0 +1,16 @@
+{
+  "name": "Kouga Wildfire Report",
+  "short_name": "Kouga Fire",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#b91c1c",
+  "description": "One-tap wildfire reporting for Kouga",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
