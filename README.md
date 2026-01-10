@@ -8,6 +8,12 @@ A fully static, GitHub Pages–compatible wildfire reporting web app for Kouga M
 - Reports can be sent via WhatsApp or email, or copied to the clipboard.
 - A best‑effort Firestore log is created on WhatsApp/Email clicks.
 
+## Repository status (current)
+- **Active static PWA**: everything is served from the repo root (no build step).
+- **Entry points**: `index.html` (main UI), `privacy.html`, `terms.html`, `disclaimer.html`.
+- **Runtime behavior**: best‑effort logging to Firestore, optional geolocation, and offline caching via `service-worker.js`.
+- **Dependencies**: browser APIs + Firebase web SDK (loaded at runtime), with all config captured in `app.js`.
+
 ## GitHub Pages setup
 1. Push the repo to GitHub.
 2. Go to **Settings → Pages**.
@@ -59,6 +65,7 @@ Link to these from the main footer and header. Keep them in the repo root for Gi
 - All links are relative (e.g. `./privacy.html`) so the app works under `/<repo>/`.
 - Replace the “Hosted at” placeholder in the footer once hosting is confirmed.
 - If you need to contact Lunatech about this app, open a GitHub issue at `https://github.com/lunatechza/kouga-fire-report/issues`.
+- Keep static assets in the repo root to preserve GitHub Pages compatibility.
 
 ## Troubleshooting
 - If the app looks stale, do a hard refresh (Ctrl/Cmd+Shift+R).
