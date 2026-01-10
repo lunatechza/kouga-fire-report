@@ -1,8 +1,11 @@
 const geoStatus = document.getElementById('geoStatus');
 const getLocationBtn = document.getElementById('getLocationBtn');
 const whatsappBtn = document.getElementById('whatsappBtn');
-const smsBtn = document.getElementById('smsBtn');
-const copyBtn = document.getElementById('copyBtn');
+const emailBtn = document.getElementById('emailBtn');
+
+const WHATSAPP_NUMBER = '27817609183';
+const EMAIL_ADDRESS = 'callcentre@kouga.gov.za';
+const EMAIL_SUBJECT = 'Wildfire Report – Kouga';
 
 let lastCoords = null;
 
@@ -11,36 +14,58 @@ function callNumber(number) {
 }
 
 function timestampLocal() {
-  return new Date().toLocaleString();
+  return new Date().toLocaleString('en-ZA', {
+    timeZone: 'Africa/Johannesburg',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
 }
 
-function buildMessage() {
+function buildReportData() {
   const visible = document.getElementById('visible').value;
   const size = document.getElementById('size').value;
   const spread = document.getElementById('spread').value;
   const note = document.getElementById('note').value.trim();
   const manualLocation = document.getElementById('manualLocation').value.trim();
 
-  let locationText = 'Location: not provided';
-  let mapsLink = '';
+  let locationLine = 'GPS: not available';
+  let mapsLink = null;
 
   if (lastCoords) {
     const { latitude, longitude } = lastCoords;
-    locationText = `GPS: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+    locationLine = `GPS: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
     mapsLink = `https://maps.google.com/?q=${latitude},${longitude}`;
   } else if (manualLocation) {
-    locationText = `Manual location: ${manualLocation}`;
+    locationLine = `Manual location: ${manualLocation}`;
   }
 
+  return {
+    visible,
+    size,
+    spread,
+    note,
+    locationLine,
+    mapsLink
+  };
+}
+
+function buildMessage() {
+  const report = buildReportData();
+
   const lines = [
-    '🔥 Kouga Wildfire Report',
-    `Time: ${timestampLocal()}`,
-    locationText,
-    mapsLink ? `Map: ${mapsLink}` : null,
-    `Visible: ${visible}`,
-    `Size: ${size}`,
-    `Spread: ${spread}`,
-    note ? `Note: ${note}` : null
+    'FIRE REPORT (Kouga Municipality)',
+    `Time (Africa/Johannesburg): ${timestampLocal()}`,
+    report.locationLine,
+    report.mapsLink ? `Map: ${report.mapsLink}` : null,
+    `Visible: ${report.visible}`,
+    `Size: ${report.size}`,
+    `Spread: ${report.spread}`,
+    report.note ? `Note: ${report.note}` : null
   ].filter(Boolean);
 
   return lines.join('\n');
@@ -48,28 +73,14 @@ function buildMessage() {
 
 function sendWhatsApp() {
   const msg = buildMessage();
-  const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.location.href = url;
 }
 
-function sendSMS() {
-  const msg = buildMessage();
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const url = isIOS
-    ? `sms:&body=${encodeURIComponent(msg)}`
-    : `sms:?body=${encodeURIComponent(msg)}`;
+function sendEmail() {
+  const body = buildMessage();
+  const url = `mailto:${EMAIL_ADDRESS}?subject=${encodeURIComponent(EMAIL_SUBJECT)}&body=${encodeURIComponent(body)}`;
   window.location.href = url;
-}
-
-async function copyMessage() {
-  const msg = buildMessage();
-  try {
-    await navigator.clipboard.writeText(msg);
-    copyBtn.textContent = 'Copied!';
-    setTimeout(() => (copyBtn.textContent = 'Copy message'), 1500);
-  } catch (e) {
-    alert('Copy failed. You can manually select and copy the text from the SMS fallback.');
-  }
 }
 
 function requestLocation() {
@@ -92,8 +103,7 @@ function requestLocation() {
 
 getLocationBtn.addEventListener('click', requestLocation);
 whatsappBtn.addEventListener('click', sendWhatsApp);
-smsBtn.addEventListener('click', sendSMS);
-copyBtn.addEventListener('click', copyMessage);
+emailBtn.addEventListener('click', sendEmail);
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
