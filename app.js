@@ -97,6 +97,7 @@ copyBtn.addEventListener('click', copyMessage);
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js');
+    const swUrl = new URL('service-worker.js', window.location.href).toString();
+    navigator.serviceWorker.register(swUrl);
   });
 }
