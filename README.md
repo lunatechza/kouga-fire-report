@@ -1,5 +1,22 @@
 # Kouga Fire Report (PWA)
 
+A fully static, GitHub Pages–compatible wildfire reporting web app for Kouga Municipality. It lets residents send reports via WhatsApp or email, and logs a best‑effort copy to Firebase Firestore for cross‑referencing.
+
+## How it works
+- Users fill in visible signs, severity, size, spread, and optional notes.
+- GPS is optional; if unavailable, the nearest town/area is required.
+- Reports can be sent via WhatsApp or email, or copied to the clipboard.
+- A best‑effort Firestore log is created on WhatsApp/Email clicks.
+
+## GitHub Pages setup
+1. Push the repo to GitHub.
+2. Go to **Settings → Pages**.
+3. Under **Build and deployment**, select **Deploy from a branch**.
+4. Choose **Branch: main** and **Folder: /** (root), then **Save**.
+5. Wait for Pages to publish, then open: `https://lunatechza.github.io/kouga-fire-report/`.
+
+> GitHub Pages serves over HTTPS, which is required for geolocation and Firebase.
+
 ## Firebase + Firestore setup (logging)
 1. Create a Firebase project in the Firebase Console.
 2. Create a Firestore database (start in production or test mode as needed).
@@ -30,16 +47,18 @@ service cloud.firestore {
 }
 ```
 
-Admin/ops reads can use the Firebase Console or a later authenticated admin tool.
+## Legal pages
+The app includes static pages at:
+- `privacy.html`
+- `terms.html`
+- `disclaimer.html`
 
-## GitHub Pages setup
-1. Push the repo to GitHub.
-2. Go to **Settings → Pages**.
-3. Under **Build and deployment**, select **Deploy from a branch**.
-4. Choose **Branch: main** and **Folder: /** (root), then **Save**.
-5. Wait for Pages to publish, then open: `https://<user>.github.io/<repo>/`.
+Link to these from the main footer and header. Keep them in the repo root for GitHub Pages subpath compatibility.
 
-> GitHub Pages serves over HTTPS, which is required for geolocation and Firebase.
+## Operational notes
+- All links are relative (e.g. `./privacy.html`) so the app works under `/<repo>/`.
+- Replace the “Hosted at” placeholder in the footer once hosting is confirmed.
+- If you need to contact Lunatech about this app, open a GitHub issue at `https://github.com/lunatechza/kouga-fire-report/issues`.
 
 ## Troubleshooting
 - If the app looks stale, do a hard refresh (Ctrl/Cmd+Shift+R).

@@ -15,6 +15,8 @@
       --bg: #f9fafb;
       --btn: #111827;
       --btn-text: #fff;
+      --muted: #6b7280;
+      --error: #b91c1c;
     }
     * { box-sizing: border-box; }
     body {
@@ -30,6 +32,18 @@
       text-align: center;
       font-weight: 700;
       font-size: 18px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      padding: 8px 16px 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: underline;
     }
     main { padding: 16px; max-width: 720px; margin: 0 auto; }
     .card {
@@ -50,6 +64,10 @@
       background: var(--btn);
       color: var(--btn-text);
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
     .btn.red { background: var(--red); }
     .btn.outline {
@@ -57,24 +75,63 @@
       color: var(--dark);
       border: 2px solid var(--dark);
     }
-    select, input {
+    select, input, textarea {
       width: 100%;
       padding: 12px;
       border-radius: 10px;
       border: 1px solid #e5e7eb;
       font-size: 16px;
-      margin: 6px 0 12px;
+      margin: 6px 0 4px;
     }
-    small { color: #6b7280; }
+    label { display: block; font-weight: 600; margin-top: 8px; }
+    small { color: var(--muted); }
     .disclaimer {
       font-size: 13px;
       color: #374151;
       line-height: 1.4;
     }
+    .error {
+      color: var(--error);
+      font-size: 13px;
+      margin: 2px 0 8px;
+      display: none;
+    }
+    .error.visible { display: block; }
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .checkbox-row input { width: auto; margin-top: 4px; }
+    footer {
+      padding: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a { color: inherit; }
+    .logo-icon {
+      width: 22px;
+      height: 22px;
+      filter: brightness(0) invert(1);
+    }
+    .life-note {
+      font-weight: 700;
+      color: var(--red);
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
-  <header>Kouga Wildfire Report</header>
+  <header>
+    Kouga Wildfire Report
+    <nav>
+      <a href="./privacy.html">Privacy Policy</a>
+      <a href="./terms.html">Terms of Use</a>
+      <a href="./disclaimer.html">Disclaimer</a>
+    </nav>
+  </header>
 
   <main>
     <div class="card">
@@ -89,11 +146,22 @@
       <h2>Send Report</h2>
 
       <label for="visible">Visible</label>
-      <select id="visible">
+      <select id="visible" required>
+        <option value="">Select</option>
         <option value="flames">Flames</option>
         <option value="smoke">Smoke</option>
         <option value="both">Both</option>
       </select>
+      <div class="error" id="visibleError">Please choose what is visible.</div>
+
+      <label for="severity">Severity</label>
+      <select id="severity" required>
+        <option value="">Select</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
+      <div class="error" id="severityError">Please choose severity.</div>
 
       <label for="size">Size</label>
       <select id="size">
@@ -112,25 +180,61 @@
       <label for="note">Landmark / Road (optional)</label>
       <input id="note" placeholder="e.g., R330 near Hankey" />
 
-      <label for="manualLocation">Manual location (if GPS off)</label>
-      <input id="manualLocation" placeholder="e.g., Humansdorp, near bridge" />
+      <label for="nearestArea">Nearest town/area (required if GPS unavailable)</label>
+      <input id="nearestArea" placeholder="e.g., Humansdorp, near bridge" />
+      <div class="error" id="nearestAreaError">Please enter the nearest town/area when GPS is unavailable.</div>
 
       <button class="btn" id="getLocationBtn">Get GPS Location</button>
       <small id="geoStatus">Location not requested yet.</small>
 
-      <button class="btn red" id="whatsappBtn">Send WhatsApp to Kouga Call Centre</button>
+      <div class="checkbox-row">
+        <input type="checkbox" id="safeToReport" />
+        <label for="safeToReport">I confirm it is safe to report right now.</label>
+      </div>
+      <div class="error" id="safeError">Please confirm it is safe to report.</div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="consent" />
+        <label for="consent">
+          I agree to the <a href="./terms.html">Terms</a> and <a href="./privacy.html">Privacy Policy</a>.
+        </label>
+      </div>
+      <div class="error" id="consentError">Please accept the Terms and Privacy Policy.</div>
+
+      <button class="btn red" id="whatsappBtn">
+        <img class="logo-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt="WhatsApp" />
+        Send WhatsApp to Kouga Call Centre
+      </button>
       <button class="btn outline" id="emailBtn">Send Email to Kouga Call Centre</button>
+      <button class="btn" id="copyBtn">Copy Report Text</button>
       <small>If this is life-threatening, call 112 immediately.</small>
     </div>
 
     <div class="card">
       <div class="disclaimer">
         <strong>Safety First:</strong> Only report if safe to do so.
-        This tool sends your details via WhatsApp or email. If location fails, use the manual location field.
+        This tool sends your details via WhatsApp or email. If location fails, use the nearest town/area field.
+        <div class="life-note">Life‑threatening emergency? Call 112 immediately.</div>
       </div>
     </div>
   </main>
 
+  <footer>
+    <div>
+      Proudly developed by <a href="https://lunatech.co.za" target="_blank" rel="noopener">Lunatech (Pty) Ltd</a>
+      · <a href="./LICENSE">MIT Licence</a>
+      · Hosted at <a href="https://lunatechza.github.io/kouga-fire-report/" target="_blank" rel="noopener">https://lunatechza.github.io/kouga-fire-report/</a>
+    </div>
+    <div>Last updated: <span id="lastUpdated">Loading...</span></div>
+    <div>
+      <a href="./privacy.html">Privacy Policy</a>
+      · <a href="./terms.html">Terms of Use</a>
+      · <a href="./disclaimer.html">Disclaimer</a>
+    </div>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

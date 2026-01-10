@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#b91c1c" />
+  <title>Disclaimer - Kouga Fire Report</title>
+  <link rel="icon" href="icon.svg" />
+  <style>
+    :root {
+      --red: #b91c1c;
+      --dark: #111827;
+      --bg: #f9fafb;
+      --muted: #6b7280;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+    }
+    header {
+      padding: 16px;
+      background: var(--red);
+      color: white;
+      text-align: center;
+      font-weight: 700;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      padding-top: 6px;
+    }
+    nav a { color: white; text-decoration: underline; }
+    main { padding: 16px; max-width: 760px; margin: 0 auto; }
+    h1 { margin-top: 0; }
+    .note { color: var(--muted); font-size: 14px; }
+    .alert {
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    footer {
+      padding: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <header>
+    Disclaimer (AS IS)
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./privacy.html">Privacy Policy</a>
+      <a href="./terms.html">Terms of Use</a>
+    </nav>
+  </header>
+  <main>
+    <div class="alert">If life‑threatening, call 112 immediately.</div>
+    <h1>Disclaimer</h1>
+    <p class="note">Last updated: 2026-01-01</p>
+
+    <h2>Provided “as is”</h2>
+    <p>This service is provided on an “as is” and “as available” basis, without warranties of any kind.</p>
+
+    <h2>Not an emergency service</h2>
+    <p>This app does not replace emergency services. Always call 112 in a life‑threatening situation.</p>
+
+    <h2>Delays and outages</h2>
+    <p>Network interruptions, device limitations, or third‑party outages may delay or prevent delivery of reports.</p>
+
+    <h2>Municipal response not guaranteed</h2>
+    <p>Reports are shared with municipal responders, but response times and outcomes cannot be guaranteed.</p>
+  </main>
+  <footer>
+    <div>
+      <a href="./index.html">Back to report</a>
+      · <a href="./privacy.html">Privacy Policy</a>
+      · <a href="./terms.html">Terms of Use</a>
+    </div>
+    <div>MIT Licence · Kouga Fire Report</div>
+  </footer>
+</body>
+</html>
