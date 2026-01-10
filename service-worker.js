@@ -1,10 +1,12 @@
-const CACHE_NAME = 'kouga-fire-v3';
+const CACHE_NAME = 'kouga-fire-v4';
 const baseUrl = new URL('./', self.location);
 
 const ASSETS = [
   baseUrl.href,
   new URL('index.html', baseUrl).href,
+  new URL('embed.html', baseUrl).href,
   new URL('app.js', baseUrl).href,
+  new URL('widget.js', baseUrl).href,
   new URL('manifest.json', baseUrl).href,
   new URL('icon.svg', baseUrl).href,
   new URL('offline.html', baseUrl).href
