@@ -26,12 +26,25 @@
       color: var(--dark);
     }
     header {
-      padding: 16px;
+      padding: 12px 16px 10px;
       background: var(--red);
       color: white;
       text-align: center;
       font-weight: 700;
       font-size: 18px;
+    }
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .header-meta {
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .header-meta a {
+      color: #fde68a;
+      text-decoration: none;
     }
     nav {
       display: flex;
@@ -39,7 +52,7 @@
       gap: 12px;
       flex-wrap: wrap;
       font-size: 14px;
-      padding: 8px 16px 0;
+      padding: 6px 16px 0;
     }
     nav a {
       color: white;
@@ -85,6 +98,12 @@
     }
     label { display: block; font-weight: 600; margin-top: 8px; }
     small { color: var(--muted); }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px 12px;
+    }
+    .field label { margin-top: 0; }
     .disclaimer {
       font-size: 13px;
       color: #374151;
@@ -121,11 +140,22 @@
       color: var(--red);
       margin-top: 8px;
     }
+    @media (max-width: 600px) {
+      header { padding: 10px 14px 8px; }
+      nav { font-size: 12px; }
+      main { padding: 12px; }
+      .card { padding: 14px; margin-bottom: 12px; }
+      .btn { padding: 12px; font-size: 16px; margin: 6px 0; }
+      select, input, textarea { padding: 10px; font-size: 15px; }
+    }
   </style>
 </head>
 <body>
   <header>
-    Kouga Wildfire Report
+    <div class="header-title">Kouga Wildfire Report</div>
+    <div class="header-meta">
+      <a href="https://lunatech.co.za" target="_blank" rel="noopener">Lunatech</a>
+    </div>
     <nav>
       <a href="./privacy.html">Privacy Policy</a>
       <a href="./terms.html">Terms of Use</a>
@@ -145,37 +175,44 @@
     <div class="card">
       <h2>Send Report</h2>
 
-      <label for="visible">Visible</label>
-      <select id="visible" required>
-        <option value="">Select</option>
-        <option value="flames">Flames</option>
-        <option value="smoke">Smoke</option>
-        <option value="both">Both</option>
-      </select>
-      <div class="error" id="visibleError">Please choose what is visible.</div>
-
-      <label for="severity">Severity</label>
-      <select id="severity" required>
-        <option value="">Select</option>
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-      <div class="error" id="severityError">Please choose severity.</div>
-
-      <label for="size">Size</label>
-      <select id="size">
-        <option value="S">S (small)</option>
-        <option value="M">M (medium)</option>
-        <option value="L">L (large)</option>
-      </select>
-
-      <label for="spread">Spread</label>
-      <select id="spread">
-        <option value="slow">Slow</option>
-        <option value="running">Running</option>
-        <option value="spotting">Spotting</option>
-      </select>
+      <div class="form-grid">
+        <div class="field">
+          <label for="visible">Visible</label>
+          <select id="visible" required>
+            <option value="">Select</option>
+            <option value="flames">Flames</option>
+            <option value="smoke">Smoke</option>
+            <option value="both">Both</option>
+          </select>
+          <div class="error" id="visibleError">Please choose what is visible.</div>
+        </div>
+        <div class="field">
+          <label for="severity">Severity</label>
+          <select id="severity" required>
+            <option value="">Select</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+          <div class="error" id="severityError">Please choose severity.</div>
+        </div>
+        <div class="field">
+          <label for="size">Size</label>
+          <select id="size">
+            <option value="S">S (small)</option>
+            <option value="M">M (medium)</option>
+            <option value="L">L (large)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="spread">Spread</label>
+          <select id="spread">
+            <option value="slow">Slow</option>
+            <option value="running">Running</option>
+            <option value="spotting">Spotting</option>
+          </select>
+        </div>
+      </div>
 
       <label for="note">Landmark / Road (optional)</label>
       <input id="note" placeholder="e.g., R330 near Hankey" />
@@ -224,6 +261,9 @@
       Proudly developed by <a href="https://lunatech.co.za" target="_blank" rel="noopener">Lunatech (Pty) Ltd</a>
       · <a href="./LICENSE">MIT Licence</a>
       · Hosted at <a href="https://lunatechza.github.io/kouga-fire-report/" target="_blank" rel="noopener">https://lunatechza.github.io/kouga-fire-report/</a>
+    </div>
+    <div>
+      Proudly open source on <a href="https://github.com/lunatechza/kouga-fire-report" target="_blank" rel="noopener">GitHub</a>.
     </div>
     <div>Last updated: <span id="lastUpdated">Loading...</span></div>
     <div>
