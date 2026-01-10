@@ -1,11 +1,13 @@
-const CACHE_NAME = 'kouga-fire-v2';
+const CACHE_NAME = 'kouga-fire-v3';
+const baseUrl = new URL('./', self.location);
+
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/app.js',
-  '/manifest.json',
-  '/icon.svg',
-  '/offline.html'
+  baseUrl.href,
+  new URL('index.html', baseUrl).href,
+  new URL('app.js', baseUrl).href,
+  new URL('manifest.json', baseUrl).href,
+  new URL('icon.svg', baseUrl).href,
+  new URL('offline.html', baseUrl).href
 ];
 
 self.addEventListener('install', (event) => {
@@ -27,7 +29,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).catch(() => caches.match('/offline.html'));
+      return (
+        cached ||
+        fetch(event.request).catch(() =>
+          caches.match(new URL('offline.html', baseUrl).href)
+        )
+      );
     })
   );
 });
