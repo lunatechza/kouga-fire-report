@@ -37,18 +37,28 @@
       font-size: 18px;
       font-weight: 700;
     }
-    small img {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-      flex: 0 0 auto;
-    }
     .header-title small {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
       font-size: 11px;
       font-weight: 600;
       margin-top: 4px;
       color: #fde68a;
+    }
+    .header-title small img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      flex: 0 0 auto;
+      display: inline-block;
+    }
+    .header-title .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .header-title small a {
       color: #fde68a;
@@ -149,7 +159,7 @@
   <header>
     <div class="header-title">
       Kouga Wildfire Report
-      <small>proudly brought to you by <img src="assets/lunatech-icon.svg" alt="Lunatech logo" /><a href="https://lunatech.co.za" target="_blank" rel="noopener">Lunatech</a></small>
+      <small>proudly brought to you by <span class="brand"><img src="assets/lunatech-icon.svg" alt="Lunatech logo" /><a href="https://lunatech.co.za" target="_blank" rel="noopener">Lunatech</a></span></small>
     </div>
   </header>
 
